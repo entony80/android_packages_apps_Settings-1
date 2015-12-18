@@ -86,10 +86,13 @@ private static final String CATEGORY_IOSCHEDUlER = "ioscheduler";
 private static final String CATEGORY_PROCESSOR = "processor";
 private static final String CATEGORY_GRAPHICS = "perf_graphics_prefs";
 private static final String FORCE_HIGHEND_GFX_PERSIST_PROP = "persist.sys.force_highendgfx";
+private static final String ENABLE_QUICKBOOT= "enable_quickboot";
+private static final String QUICKBOOT_PACKAGE_NAME = "com.qapp.quickboot";
 private static final String APP_PROCESS_LIMIT_KEY = "app_process_limit";
 private static final String FORCE_HARDWARE_UI_KEY = "force_hw_ui";
 private PerformanceProfileObserver mPerformanceProfileObserver = null;
 private static final String DISABLE_OVERLAYS_KEY = "disable_overlays";
+private static final String BOOT_OPTIONS = "maxi_boot";
 private static final String HARDWARE_UI_PROPERTY = "persist.sys.ui.hw";
 public static final String PREF_SHOW = "show";
 public static final String PREF_FILE = "development";
@@ -105,6 +108,7 @@ private AlertDialog mAlertDialog;
 private Dialog mEnableDialog;
 private PowerManager mPowerManager;
 private SharedPreferences mDevelopmentPreferences;
+private SwitchPreference mQuickBoot;
 private ListPreference mAppProcessLimit;
 private PreferenceScreen mProcessor;
 private PreferenceScreen mIOScheduler;
@@ -112,6 +116,7 @@ private ListPreference mSystemCategory;
 private SwitchPreference mForceHighEndGfx;
 private SwitchPreference mForceHardwareUi;
 private SwitchPreference mDisableOverlays;
+private PreferenceCategory mBoot;
 private SwitchBar mSwitchBar;
 
 private final ArrayList<Preference> mAllPrefs = new ArrayList<Preference>();
@@ -135,6 +140,7 @@ private final HashSet<Preference> mDisabledPrefs = new HashSet<Preference>();
 	mSystemCategory = (ListPreference) findPreference(CATEGORY_PROFILES);
 	mForceHighEndGfx = (SwitchPreference) prefSet.findPreference(FORCE_HIGHEND_GFX_PREF);
 	PreferenceCategory category = (PreferenceCategory) prefSet.findPreference(CATEGORY_GRAPHICS);
+	mBoot = (PreferenceCategory) prefSet.findPreference(BOOT_OPTIONS);
 	
 	//Look For Power Profiles
         if (!mPowerManager.hasPowerProfiles()) {
@@ -146,7 +152,11 @@ private final HashSet<Preference> mDisabledPrefs = new HashSet<Preference>();
 	   prefSet.addPreference(category);
 		mAppProcessLimit = addListPreference(APP_PROCESS_LIMIT_KEY);
 	        mDisableOverlays = findAndInitSwitchPref(DISABLE_OVERLAYS_KEY);
-	    	mForceHardwareUi = findAndInitSwitchPref(FORCE_HARDWARE_UI_KEY);	
+		mForceHardwareUi = findAndInitSwitchPref(FORCE_HARDWARE_UI_KEY);
+		mQuickBoot = findAndInitSwitchPref(ENABLE_QUICKBOOT);
+ 	if (!Utils.isPackageInstalled(getActivity(), QUICKBOOT_PACKAGE_NAME, false)) {   prefSet.removePreference(mBoot);
+    removePreference1(mQuickBoot);		
+	    		
 	}
 	   mSystemCategory.setOrder(-1);
            mSystemCategory.setEntries(mPerfProfileEntries);
@@ -163,8 +173,11 @@ private final HashSet<Preference> mDisabledPrefs = new HashSet<Preference>();
         if (!supported) {
 		mAppProcessLimit = addListPreference(APP_PROCESS_LIMIT_KEY);
 	        mDisableOverlays = findAndInitSwitchPref(DISABLE_OVERLAYS_KEY);
-		mForceHardwareUi = findAndInitSwitchPref(FORCE_HARDWARE_UI_KEY);	
-
+		mForceHardwareUi = findAndInitSwitchPref(FORCE_HARDWARE_UI_KEY);
+		mQuickBoot = findAndInitSwitchPref(ENABLE_QUICKBOOT);
+	           if (!Utils.isPackageInstalled(getActivity(), QUICKBOOT_PACKAGE_NAME, false)) {
+	    prefSet.removePreference(mBoot);
+	    removePreference1(mQuickBoot);			    
 	}
 		 prefSet.addPreference(category);
 	   	    mSystemCategory.setOrder(-1);
@@ -259,6 +272,10 @@ private final HashSet<Preference> mDisabledPrefs = new HashSet<Preference>();
                 updatePerformanceSummary();
                 return true;
 	}
+	else if (preference == mQuickBoot) {
+            Settings.System.putInt(getActivity().getContentResolver(), ENABLE_QUICKBOOT,
+                    mQuickBoot.isChecked() ? 1 : 0);
+       		 }
 	else if (preference == mAppProcessLimit) {
             writeAppProcessLimitOptions(newValue);
             return true;
@@ -421,6 +438,7 @@ private final HashSet<Preference> mDisabledPrefs = new HashSet<Preference>();
 	{
 	final Context context = getActivity();
         final ContentResolver cr = context.getContentResolver();
+	updateSwitchPreference(mQuickBoot, Settings.System.getInt(cr, ENABLE_QUICKBOOT, 0) != 0);
 	updateHardwareUiOptions();
 	updateFlingerOptions();
 	updateAppProcessLimitOptions();
