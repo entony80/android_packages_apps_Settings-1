@@ -96,6 +96,7 @@ import com.android.settings.fuelgauge.PowerUsageSummary;
 import com.android.settings.livedisplay.LiveDisplay;
 import com.android.settings.notification.NotificationManagerSettings;
 import com.android.settings.notification.OtherSoundSettings;
+import com.android.settings.maxi.MaxiUiSettings;
 import com.android.settings.notification.SoundSettings;
 import com.android.settings.profiles.NFCProfileTagCallback;
 import com.android.settings.profiles.ProfilesSettings;
@@ -271,11 +272,11 @@ public class SettingsActivity extends Activity
             R.id.data_usage_settings,
             R.id.sim_settings,
             R.id.wireless_settings,
+	    R.id.device_personalization,
+	    R.id.maxi_ui_settings,
             R.id.device_section,
             R.id.sound_settings,
             R.id.display_and_lights_settings,
-            R.id.lockscreen_settings,
-            R.id.notification_manager,
             R.id.storage_settings,
             R.id.application_settings,
             R.id.battery_settings,
