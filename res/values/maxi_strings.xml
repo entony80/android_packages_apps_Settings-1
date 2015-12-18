@@ -79,4 +79,8 @@
     <!-- Fast charge -->
     <string name="pref_force_fast_charge_title">Fast charge</string>
 
+    <!-- Development : Force high-end graphics -->
+    <string name="pref_force_highend_gfx_title">Force high-end graphics</string>
+    <string name="pref_force_highend_gfx_summary">Enables high-end visual effects.Proceed with Caution, highly experimental</string>
+
 </resources>
