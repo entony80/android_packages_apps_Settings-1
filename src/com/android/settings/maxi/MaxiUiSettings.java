@@ -27,6 +27,8 @@ import android.preference.PreferenceScreen;
 import android.provider.Settings;
 import android.util.Log;
 
+import com.android.internal.logging.MetricsLogger;
+
 import com.android.settings.R;
 import com.android.settings.SettingsPreferenceFragment;
 
@@ -41,6 +43,11 @@ public class MaxiUiSettings extends SettingsPreferenceFragment implements
 
         addPreferencesFromResource(R.xml.maxi_ui_settings);
 
+    }
+
+    protected int getMetricsCategory()
+    {
+	return MetricsLogger.APPLICATION;
     }
 
     @Override
