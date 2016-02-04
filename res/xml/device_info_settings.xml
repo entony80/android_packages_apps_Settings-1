@@ -17,20 +17,6 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
         android:title="@string/about_settings">
 
-        <!-- System update settings - launches activity -->
-        <PreferenceScreen android:key="system_update_settings"
-                android:title="@string/system_update_settings_list_item_title"
-                android:summary="@string/system_update_settings_list_item_summary">
-            <intent android:action="android.settings.SYSTEM_UPDATE_SETTINGS" />
-        </PreferenceScreen>
-
-        <PreferenceScreen android:key="additional_system_update_settings"
-                          android:title="@string/additional_system_update_settings_list_item_title">
-            <intent android:action="android.intent.action.MAIN"
-                    android:targetPackage="@string/additional_system_update"
-                    android:targetClass="@string/additional_system_update_menu" />
-        </PreferenceScreen>
-
         <!-- Device status - launches activity -->
         <PreferenceScreen android:key="status_info"
                 android:title="@string/device_status"
@@ -64,10 +50,16 @@
                 android:title="@string/device_feedback">
         </PreferenceScreen>
 
+        <!-- Device name -->
+        <Preference android:key="device_name"
+                style="?android:preferenceInformationStyle"
+                android:title="@string/device_name"
+                android:summary="@string/device_info_default"/>
+
         <!-- Device hardware model -->
         <Preference android:key="device_model"
                 style="?android:preferenceInformationStyle"
-                android:title="@string/model_name"
+                android:title="@string/device_model"
                 android:summary="@string/device_info_default"/>
 
         <!-- Device firmware version -->
